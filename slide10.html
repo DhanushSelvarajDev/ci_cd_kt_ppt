@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>main Branch Flow</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #0d1117; /* GitHub Dark Dimmed */
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Background Pattern */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2330363d' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .header {
+            padding: 30px 60px 20px 60px;
+            z-index: 10;
+            border-bottom: 1px solid #30363d;
+            background-color: #0d1117;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .content-area {
+            display: flex;
+            flex: 1;
+            z-index: 10;
+            padding: 0 60px;
+            overflow: hidden;
+        }
+
+        /* Layout Split */
+        .flow-section {
+            flex: 2;
+            padding: 20px 40px 20px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-section {
+            flex: 1;
+            padding: 40px 0 40px 40px;
+            border-left: 1px solid #30363d;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: rgba(13, 17, 23, 0.3);
+        }
+
+        /* Process Steps */
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+
+        /* Connecting Line */
+        .step-line {
+            position: absolute;
+            left: 24px;
+            top: 20px;
+            bottom: 20px;
+            width: 2px;
+            background-color: #30363d;
+            z-index: 0;
+        }
+
+        .step-card {
+            display: flex;
+            align-items: center;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 10px 20px;
+            position: relative;
+            z-index: 1;
+            transition: all 0.2s ease;
+            height: 60px;
+        }
+
+        .step-card:hover {
+            border-color: #2ea043; /* Green accent for main */
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Special style for deployment step */
+        .step-card.deploy-step {
+            border-color: rgba(46, 160, 67, 0.4);
+            background-color: rgba(46, 160, 67, 0.1);
+        }
+        
+        .step-card.deploy-step:hover {
+            border-color: #2ea043;
+            background-color: rgba(46, 160, 67, 0.2);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background-color: #0d1117;
+            border: 2px solid #2ea043; /* Green accent */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 700;
+            color: #2ea043;
+            font-size: 1.2rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .step-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #e6edf3;
+            margin: 0;
+        }
+
+        .step-desc {
+            font-size: 0.85rem;
+            color: #8b949e;
+            margin: 0;
+        }
+
+        .step-icon {
+            color: #7d8590;
+            font-size: 1.2rem;
+            width: 30px;
+            text-align: center;
+        }
+        
+        .deploy-step .step-icon {
+            color: #2ea043;
+        }
+
+        /* Trigger Card (Top) */
+        .trigger-card {
+            background-color: rgba(163, 113, 247, 0.1); /* Purple tint for Merge PR */
+            border: 1px solid rgba(163, 113, 247, 0.4);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .trigger-icon {
+            color: #a371f7;
+            font-size: 1.5rem;
+        }
+
+        /* Outcome Card (Bottom Right) */
+        .outcome-card {
+            background-color: rgba(56, 139, 253, 0.1); /* Blue tint for Live */
+            border: 1px solid rgba(56, 139, 253, 0.4);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .outcome-icon {
+            font-size: 3rem;
+            color: #58a6ff;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .outcome-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #58a6ff;
+            margin-bottom: 10px;
+        }
+
+        .outcome-text {
+            color: #e6edf3;
+            line-height: 1.5;
+        }
+
+        /* Info Text */
+        .info-header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffffff;
+            border-left: 4px solid #2ea043;
+            padding-left: 15px;
+        }
+
+        .info-desc {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #8b949e;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 25px;
+            right: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: #484f58;
+            z-index: 20;
+        }
+
+        /* Command tag style */
+        .cmd-tag {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            background-color: rgba(110, 118, 129, 0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: #8b949e;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<div class="grid-bg"></div>
+<!-- Header -->
+<div class="header">
+<p class="page-title">main Branch Flow</p>
+<i class="fa-solid fa-rocket" style="font-size: 2rem; color: #2ea043;"></i>
+</div>
+<div class="content-area">
+<!-- Left: Flow Diagram -->
+<div class="flow-section">
+<!-- Step Container -->
+<div class="step-container">
+<div class="step-line"></div>
+<!-- Step 1 -->
+<div class="step-card">
+<div class="step-number">1</div>
+<div class="step-content">
+<div>
+<p class="step-title">Checkout Code</p>
+<p class="step-desc">Clone the stable production code</p>
+</div>
+<span class="cmd-tag">actions/checkout</span>
+<i class="fa-solid fa-download step-icon"></i>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="step-card">
+<div class="step-number">2</div>
+<div class="step-content">
+<div>
+<p class="step-title">Install Dependencies</p>
+<p class="step-desc">Clean install for production</p>
+</div>
+<span class="cmd-tag">npm ci --production</span>
+<i class="fa-brands fa-npm step-icon"></i>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="step-card">
+<div class="step-number">3</div>
+<div class="step-content">
+<div>
+<p class="step-title">Run Tests</p>
+<p class="step-desc">Final verification (Unit/E2E)</p>
+</div>
+<span class="cmd-tag">npm test</span>
+<i class="fa-solid fa-vial-circle-check step-icon"></i>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="step-card">
+<div class="step-number">4</div>
+<div class="step-content">
+<div>
+<p class="step-title">Build Artifacts</p>
+<p class="step-desc">Create optimized production build</p>
+</div>
+<span class="cmd-tag">npm run build</span>
+<i class="fa-solid fa-box-archive step-icon"></i>
+</div>
+</div>
+<!-- Step 5: DEPLOYMENT -->
+<div class="step-card deploy-step">
+<div class="step-number">5</div>
+<div class="step-content">
+<div>
+<p class="step-title" style="color: #2ea043;">Deploy to Production</p>
+<p class="step-desc">Release to live environment</p>
+</div>
+<span class="cmd-tag" style="color: #2ea043; background: rgba(46,160,67,0.15);">npm run deploy</span>
+<i class="fa-solid fa-cloud-arrow-up step-icon"></i>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Info Panel -->
+<div class="info-section">
+<div>
+<div class="trigger-card">
+<i class="fa-solid fa-code-merge trigger-icon"></i>
+<div>
+<p style="font-weight: 700; color: #a371f7; margin: 0;">TRIGGER EVENT</p>
+<p style="margin: 0; color: #c9d1d9;">Pull Request Merged to <span style="font-family: 'Roboto Mono'; background: rgba(46,160,67,0.2); color: #3fb950; padding: 2px 5px; border-radius: 4px;">main</span></p>
+</div>
+</div>
+<div class="info-header">Purpose</div>
+<p class="info-desc">
+                        The main branch represents the production state. 
+                        This workflow executes the <strong>Continuous Deployment (CD)</strong> 
+                        process, ensuring that tested and built code is automatically 
+                        released to users.
+                    </p>
+</div>
+<div class="outcome-card">
+<i class="fa-solid fa-globe outcome-icon"></i>
+<p class="outcome-title">Reliable Delivery</p>
+<p class="outcome-text">New features &amp; fixes are live for users</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<p>10 / 20</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alternatives to GitHub Actions</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 40px 60px;
+        }
+        
+        /* Background Pattern */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2330363d' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Decorative Elements */
+        .circle-accent {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .circle-1 {
+            width: 600px;
+            height: 600px;
+            background-color: #bc8cff; /* Purple for this slide */
+            top: -200px;
+            right: -200px;
+        }
+        .circle-2 {
+            width: 400px;
+            height: 400px;
+            background-color: #1f6feb;
+            bottom: -100px;
+            left: -100px;
+        }
+
+        .content-wrapper {
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        .page-icon {
+            font-size: 2rem;
+            color: #bc8cff; /* Matching purple accent */
+        }
+
+        .list-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 4rem;
+            flex: 1;
+            align-content: center; /* Centered vertically for this slide */
+        }
+
+        .list-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem; /* Slightly larger gap for fewer items */
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+            color: #e6edf3;
+            background-color: rgba(22, 27, 34, 0.6);
+            padding: 18px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(48, 54, 61, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        .list-item:hover {
+            border-color: #bc8cff;
+            background-color: rgba(22, 27, 34, 0.9);
+            transform: translateX(4px);
+        }
+
+        .bullet-icon {
+            color: #79c0ff; /* Light blue */
+            margin-right: 1.2rem;
+            font-size: 1.4rem;
+            width: 30px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .section-highlight {
+            color: #bc8cff;
+            font-weight: 600;
+        }
+
+        .code-tag {
+            font-family: 'Roboto Mono', monospace;
+            background-color: rgba(110, 118, 129, 0.4);
+            color: #d2a8ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            margin-left: auto; /* Push to right */
+        }
+
+        .item-text {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 25px;
+            right: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: #484f58;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background -->
+<div class="grid-bg"></div>
+<div class="circle-accent circle-1"></div>
+<div class="circle-accent circle-2"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<div class="header">
+<p class="page-title">Alternatives to GitHub Actions</p>
+<i class="fa-solid fa-server page-icon"></i>
+</div>
+<!-- Content Grid -->
+<div class="list-container">
+<!-- Left Column -->
+<div class="list-column">
+<div class="list-item">
+<i class="fa-brands fa-jenkins bullet-icon"></i>
+<div class="item-text">
+<p>Jenkins</p>
+<span class="code-tag">Self-Hosted</span>
+</div>
+</div>
+<div class="list-item">
+<i class="fa-brands fa-gitlab bullet-icon"></i>
+<div class="item-text">
+<p>GitLab CI/CD</p>
+<span class="code-tag">Integrated</span>
+</div>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-circle-notch bullet-icon"></i>
+<div class="item-text">
+<p>CircleCI</p>
+<span class="code-tag">Cloud Native</span>
+</div>
+</div>
+</div>
+<!-- Right Column -->
+<div class="list-column">
+<div class="list-item">
+<i class="fa-brands fa-travis bullet-icon"></i>
+<div class="item-text">
+<p>Travis CI</p>
+<span class="code-tag">Open Source</span>
+</div>
+</div>
+<div class="list-item">
+<i class="fa-brands fa-bitbucket bullet-icon"></i>
+<div class="item-text">
+<p>Bitbucket Pipelines</p>
+<span class="code-tag">Atlassian</span>
+</div>
+</div>
+<div class="list-item">
+<i class="fa-brands fa-microsoft bullet-icon"></i>
+<div class="item-text">
+<p>Azure Pipelines</p>
+<span class="code-tag">Enterprise</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="footer">
+<p>18 / 20</p>
+</div>
+</div>
+</body>
+</html>

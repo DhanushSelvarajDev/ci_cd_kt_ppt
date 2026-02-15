@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GitHub Actions Folder Structure</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #0d1117; /* GitHub Dark Dimmed */
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Background Pattern */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2330363d' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .header {
+            padding: 40px 60px 20px 60px;
+            z-index: 10;
+            border-bottom: 1px solid #30363d;
+            background-color: #0d1117;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .content-area {
+            display: flex;
+            flex: 1;
+            z-index: 10;
+            padding: 40px 60px;
+            gap: 60px;
+            align-items: center;
+        }
+
+        /* Left Column: Folder Tree */
+        .tree-container {
+            flex: 1;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.4rem;
+            color: #e6edf3;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Syntax Highlighting for Tree */
+        .tree-line {
+            display: flex;
+            align-items: center;
+            line-height: 1.8;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin-left: -8px;
+        }
+
+        .tree-line:hover {
+            background-color: rgba(56, 139, 253, 0.1);
+        }
+        
+        /* Highlight specific line */
+        .highlight-line {
+            background-color: rgba(46, 164, 79, 0.15);
+            border-left: 3px solid #3fb950;
+            margin-left: -11px; /* Compensate for border */
+        }
+
+        .icon-folder { color: #58a6ff; margin-right: 10px; }
+        .icon-file { color: #8b949e; margin-right: 10px; }
+        .icon-yml { color: #e3b341; margin-right: 10px; }
+        .icon-js { color: #f1e05a; margin-right: 10px; }
+        .tree-branch { color: #484f58; margin-right: 8px; }
+
+        /* Right Column: Explanation */
+        .explanation-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .info-card {
+            background-color: rgba(13, 17, 23, 0.5);
+            border-left: 4px solid;
+            padding: 25px;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+        }
+
+        .card-blue { border-color: #58a6ff; background-color: rgba(56, 139, 253, 0.05); }
+        .card-green { border-color: #3fb950; background-color: rgba(46, 164, 79, 0.05); }
+
+        .info-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .text-blue { color: #58a6ff; }
+        .text-green { color: #3fb950; }
+
+        .info-desc {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #8b949e;
+            margin: 0;
+        }
+
+        .path-tag {
+            font-family: 'Roboto Mono', monospace;
+            background-color: rgba(110, 118, 129, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #c9d1d9;
+            font-size: 0.9em;
+        }
+
+        .arrow-pointer {
+            position: absolute;
+            left: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #58a6ff;
+            font-size: 2rem;
+            opacity: 0.5;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 25px;
+            right: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: #484f58;
+            z-index: 20;
+        }
+        
+        /* Directory decoration */
+        .dir-root {
+            font-weight: 700;
+            color: #e6edf3;
+        }
+        
+        .glow-effect {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(88,166,255,0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            top: 100px;
+            left: 100px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<div class="grid-bg"></div>
+<!-- Header -->
+<div class="header">
+<p class="page-title">GitHub Actions Folder Structure</p>
+<i class="fa-regular fa-folder-open" style="font-size: 2rem; color: #7ee787;"></i>
+</div>
+<div class="content-area">
+<!-- Left: Tree View -->
+<div class="tree-container">
+<div class="glow-effect"></div>
+<!-- Project Root -->
+<div class="tree-line">
+<i class="fa-solid fa-folder icon-folder"></i>
+<span class="dir-root">my-project/</span>
+</div>
+<!-- .github folder -->
+<div class="tree-line">
+<span class="tree-branch">├──</span>
+<i class="fa-regular fa-folder icon-folder"></i>
+<span>.github/</span>
+</div>
+<!-- workflows folder -->
+<div class="tree-line">
+<span class="tree-branch">│   └──</span>
+<i class="fa-regular fa-folder icon-folder"></i>
+<span>workflows/</span>
+</div>
+<!-- ci.yml file (Highlighted) -->
+<div class="tree-line highlight-line">
+<span class="tree-branch" style="margin-left: 11px;">│       └──</span>
+<i class="fa-solid fa-file-code icon-yml"></i>
+<span style="color: #3fb950; font-weight: 700;">ci.yml</span>
+</div>
+<!-- source code folder -->
+<div class="tree-line">
+<span class="tree-branch">├──</span>
+<i class="fa-regular fa-folder icon-folder"></i>
+<span>src/</span>
+</div>
+<!-- app.js file -->
+<div class="tree-line">
+<span class="tree-branch">│   └──</span>
+<i class="fa-brands fa-js icon-js"></i>
+<span>app.js</span>
+</div>
+<!-- package.json -->
+<div class="tree-line">
+<span class="tree-branch">├──</span>
+<i class="fa-solid fa-file-code icon-file"></i>
+<span>package.json</span>
+</div>
+<!-- README -->
+<div class="tree-line">
+<span class="tree-branch">└──</span>
+<i class="fa-solid fa-file-lines icon-file"></i>
+<span>README.md</span>
+</div>
+</div>
+<!-- Right: Explanation -->
+<div class="explanation-container">
+<!-- Key Path explanation -->
+<div class="info-card card-blue">
+<h3 class="info-title text-blue">
+<i class="fa-solid fa-sitemap"></i>
+                        Standard Location
+                    </h3>
+<p class="info-desc">
+                        GitHub specifically looks for workflow configurations in the <span class="path-tag">.github/workflows/</span> directory.
+                    </p>
+</div>
+<!-- File explanation -->
+<div class="info-card card-green">
+<h3 class="info-title text-green">
+<i class="fa-solid fa-file-code"></i>
+                        Configuration File
+                    </h3>
+<p class="info-desc">
+                        The <span class="path-tag">ci.yml</span> (or any .yml file) contains the automation instructions. You can have multiple files here for different workflows (e.g., release.yml, test.yml).
+                    </p>
+</div>
+<!-- Structure Note -->
+<div class="info-card" style="border-left: 4px solid #8b949e; background-color: rgba(13, 17, 23, 0.3);">
+<h3 class="info-title" style="color: #e6edf3;">
+<i class="fa-solid fa-info-circle"></i>
+                        Why this structure?
+                    </h3>
+<p class="info-desc">
+                        Keeping workflows in a hidden dot-folder prevents clutter in your main source code while ensuring GitHub's runner knows exactly where to find instructions.
+                    </p>
+</div>
+</div>
+</div>
+<div class="footer">
+<p>12 / 20</p>
+</div>
+</div>
+</body>
+</html>

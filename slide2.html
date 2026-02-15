@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Agenda - CI/CD Implementation</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 40px 60px;
+        }
+        
+        /* Background Pattern - using SVG data URI for grid to avoid gradient */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2330363d' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Decorative Elements - Solid colors only */
+        .circle-accent {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .circle-1 {
+            width: 600px;
+            height: 600px;
+            background-color: #1f6feb;
+            top: -300px;
+            right: -100px;
+        }
+
+        .content-wrapper {
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .header {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        .page-icon {
+            font-size: 2rem;
+            color: #7ee787; /* GitHub Green */
+        }
+
+        .list-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 4rem; /* Horizontal gap */
+            flex: 1;
+            align-content: start;
+        }
+
+        .list-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem; /* Vertical spacing between items */
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+            color: #e6edf3;
+            background-color: rgba(22, 27, 34, 0.6); /* Semi-transparent card bg */
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: 1px solid rgba(48, 54, 61, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        .list-item:hover {
+            border-color: #58a6ff;
+            background-color: rgba(22, 27, 34, 0.9);
+            transform: translateX(4px);
+        }
+
+        .bullet-icon {
+            color: #58a6ff; /* GitHub Blue */
+            margin-right: 1rem;
+            font-size: 0.9rem;
+            width: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .section-highlight {
+            color: #bc8cff; /* Purple for key sections */
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        .code-tag {
+            font-family: 'Roboto Mono', monospace;
+            background-color: rgba(110, 118, 129, 0.4);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin: 0 4px;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 25px;
+            right: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: #484f58;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background -->
+<div class="grid-bg"></div>
+<div class="circle-accent circle-1"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<div class="header">
+<p class="page-title">Agenda</p>
+<i class="fa-solid fa-list-check page-icon"></i>
+</div>
+<!-- Content Grid -->
+<div class="list-container">
+<!-- Left Column -->
+<div class="list-column">
+<div class="list-item">
+<i class="fa-solid fa-circle-info bullet-icon"></i>
+<p>What is <span class="section-highlight">CI</span>? (Continuous Integration)</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-truck-fast bullet-icon"></i>
+<p>What is <span class="section-highlight">CD</span>? (Continuous Delivery)</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-question bullet-icon"></i>
+<p>Why we use CI/CD</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-map-location-dot bullet-icon"></i>
+<p>Where we use CI/CD</p>
+</div>
+<div class="list-item">
+<i class="fa-brands fa-github bullet-icon"></i>
+<p>What is <span class="section-highlight">GitHub Actions</span>?</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-code-branch bullet-icon"></i>
+<p>Branch Strategy (<span class="code-tag">dev</span> &amp; <span class="code-tag">main</span>)</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-diagram-project bullet-icon"></i>
+<p>Workflows &amp; Examples</p>
+</div>
+</div>
+<!-- Right Column -->
+<div class="list-column">
+<div class="list-item">
+<i class="fa-solid fa-shield-halved bullet-icon"></i>
+<p>Deploy Only on <span class="code-tag">main</span> Branch</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-book bullet-icon"></i>
+<p>Important Concepts</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-cart-shopping bullet-icon"></i>
+<p>Real-time Example</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-thumbs-up bullet-icon"></i>
+<p>Advantages of CI/CD</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-arrow-right-arrow-left bullet-icon"></i>
+<p>Alternatives to GitHub Actions</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-table-columns bullet-icon"></i>
+<p>Dev vs Main Summary</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-flag-checkered bullet-icon"></i>
+<p>Conclusion</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="footer">
+<p>02 / 20</p>
+</div>
+</div>
+</body>
+</html>

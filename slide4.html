@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>What is CD?</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 40px 60px;
+        }
+        
+        /* Background Pattern */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2330363d' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Decorative Elements */
+        .circle-accent {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .circle-1 {
+            width: 600px;
+            height: 600px;
+            background-color: #238636; /* Green for CD/Deployment focus */
+            top: -200px;
+            right: -100px;
+        }
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            background-color: #1f6feb;
+            bottom: -50px;
+            left: -50px;
+        }
+
+        .content-wrapper {
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .header {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        .page-icon {
+            font-size: 2rem;
+            color: #7ee787;
+        }
+
+        .list-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem 4rem;
+            flex: 1;
+            align-content: center;
+        }
+
+        .list-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: flex-start; /* Aligned to start for multi-line text */
+            font-size: 1.15rem;
+            color: #e6edf3;
+            background-color: rgba(22, 27, 34, 0.6);
+            padding: 16px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(48, 54, 61, 0.5);
+            transition: all 0.2s ease;
+            height: 100%;
+        }
+
+        .list-item:hover {
+            border-color: #238636; /* Green hover for CD */
+            background-color: rgba(22, 27, 34, 0.9);
+            transform: translateX(4px);
+        }
+
+        .bullet-icon {
+            color: #7ee787; /* GitHub Green */
+            margin-right: 1.2rem;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .section-highlight {
+            color: #7ee787;
+            font-weight: 700;
+        }
+        
+        .section-highlight-blue {
+            color: #58a6ff;
+            font-weight: 700;
+        }
+
+        .code-tag {
+            font-family: 'Roboto Mono', monospace;
+            background-color: rgba(110, 118, 129, 0.4);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin: 0 4px;
+            color: #fff;
+        }
+
+        .formula-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 15px;
+            background: rgba(13, 17, 23, 0.8);
+            border-radius: 6px;
+            border: 1px dashed #30363d;
+        }
+
+        .formula-item {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .arrow {
+            color: #8b949e;
+            margin: 0 10px;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 25px;
+            right: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: #484f58;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background -->
+<div class="grid-bg"></div>
+<div class="circle-accent circle-1"></div>
+<div class="circle-accent circle-2"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<div class="header">
+<p class="page-title">What is CD?</p>
+<i class="fa-solid fa-rocket page-icon"></i>
+</div>
+<!-- Content Grid -->
+<div class="list-container">
+<!-- Left Column: Definition & Process -->
+<div class="list-column">
+<div class="list-item">
+<i class="fa-solid fa-font bullet-icon"></i>
+<div>
+<p style="margin: 0 0 5px 0; font-weight: 600;">CD Definition</p>
+<p style="margin: 0; font-size: 1rem; color: #8b949e;">Continuous Delivery / Continuous Deployment</p>
+</div>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-forward-step bullet-icon"></i>
+<div>
+<p style="margin: 0;">Triggered immediately after <span class="section-highlight-blue">CI Success</span>.</p>
+<p style="margin: 5px 0 0 0; font-size: 0.95rem; color: #8b949e;">No broken code moves forward.</p>
+</div>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-box-open bullet-icon"></i>
+<div>
+<p style="margin: 0;">Code is packaged and prepared for release.</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Distinction & Formula -->
+<div class="list-column">
+<div class="list-item">
+<i class="fa-solid fa-arrows-split-up-and-left bullet-icon"></i>
+<div>
+<p style="margin: 0 0 8px 0; font-weight: 600;">The Distinction</p>
+<p style="margin: 0 0 5px 0; font-size: 0.95rem;"><span class="section-highlight">Delivery:</span> Code ready to deploy (Manual click).</p>
+<p style="margin: 0; font-size: 0.95rem;"><span class="section-highlight">Deployment:</span> Code goes live automatically.</p>
+</div>
+</div>
+<div class="list-item" style="flex-direction: column;">
+<div style="display: flex; align-items: center; margin-bottom: 10px;">
+<i class="fa-solid fa-calculator bullet-icon"></i>
+<p style="margin: 0; font-weight: 600;">Simple Formula</p>
+</div>
+<div class="formula-box" style="width: 100%;">
+<div class="formula-item">
+<span style="color: #58a6ff;">CI</span>
+<span class="arrow">→</span>
+<span>Test Automatically</span>
+</div>
+<div class="formula-item">
+<span style="color: #7ee787;">CD</span>
+<span class="arrow">→</span>
+<span>Deploy Automatically</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="footer">
+<p>04 / 20</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Deploy Only for Main Branch</title>
+<script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body { margin: 0; padding: 0; background-color: #000; overflow: hidden; }
+        .slide-container { width: 1280px; height: 720px; background-color: #0d1117; color: #c9d1d9; font-family: 'Inter', sans-serif; position: relative; display: flex; flex-direction: column; overflow: hidden; }
+        .grid-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2330363d' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E"); opacity: 0.3; z-index: 0; pointer-events: none; }
+        
+        /* Header */
+        .header { padding: 30px 60px 20px 60px; z-index: 10; border-bottom: 1px solid #30363d; background-color: #0d1117; display: flex; justify-content: space-between; align-items: center; height: 90px; }
+        .page-title { font-size: 2.2rem; font-weight: 700; color: #ffffff; margin: 0; letter-spacing: -0.02em; }
+
+        /* Content Layout */
+        .content-area { display: flex; flex: 1; padding: 40px 60px; gap: 40px; z-index: 10; overflow: hidden; align-items: flex-start; }
+        
+        /* Code Editor Window */
+        .editor-window {
+            flex: 3;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            height: 100%;
+        }
+        
+        .editor-header {
+            background-color: #161b22;
+            border-bottom: 1px solid #30363d;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-name {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            color: #e6edf3;
+            font-weight: 600;
+        }
+        
+        .file-path {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+
+        .editor-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .control-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-red { background-color: #ff5f56; }
+        .dot-yellow { background-color: #ffbd2e; }
+        .dot-green { background-color: #27c93f; }
+
+        .editor-body {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            background-color: #0d1117;
+        }
+        
+        /* Scrollbar styling */
+        .editor-body::-webkit-scrollbar { width: 10px; }
+        .editor-body::-webkit-scrollbar-track { background: #0d1117; }
+        .editor-body::-webkit-scrollbar-thumb { background: #30363d; border-radius: 5px; border: 2px solid #0d1117; }
+        
+        .code-line {
+            display: flex;
+            padding: 0 20px;
+            position: relative;
+        }
+        
+        .code-line:hover {
+            background-color: rgba(110, 118, 129, 0.1);
+        }
+
+        .code-line.highlight-line {
+            background-color: rgba(56, 139, 253, 0.15);
+            border-left: 2px solid #388bfd;
+        }
+        
+        .line-num {
+            width: 30px;
+            text-align: right;
+            margin-right: 20px;
+            color: #484f58;
+            user-select: none;
+            font-size: 0.85rem;
+            padding-top: 1px;
+        }
+        
+        .code-content {
+            color: #e6edf3;
+            white-space: pre;
+        }
+
+        /* Syntax Highlighting Colors - GitHub Dark Themeish */
+        .kwd { color: #ff7b72; } /* Keywords: name, on, jobs, steps, uses, run, with */
+        .prop { color: #d2a8ff; } /* Properties: push, branches, runs-on, needs, if */
+        .str { color: #a5d6ff; } /* Strings */
+        .val { color: #79c0ff; } /* Values */
+        .cmt { color: #8b949e; font-style: italic; } /* Comments */
+        .act { color: #7ee787; } /* Actions */
+        .obj { color: #d2a8ff; } /* Objects/Keys */
+
+        /* Annotations Panel */
+        .annotations {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            padding-top: 10px;
+        }
+
+        .annotation-card {
+            background-color: rgba(22, 27, 34, 0.6);
+            border: 1px solid #30363d;
+            border-left-width: 4px;
+            border-radius: 6px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .annotation-card:hover {
+            transform: translateX(-8px);
+            background-color: rgba(22, 27, 34, 0.95);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border-color: #8b949e;
+        }
+
+        .card-title {
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .card-desc {
+            font-size: 0.95rem;
+            color: #8b949e;
+            margin: 0;
+            line-height: 1.5;
+        }
+        
+        /* Card Specifics */
+        .card-condition { border-left-color: #ff7b72; }
+        .card-condition .card-title { color: #ff7b72; }
+        
+        .card-deps { border-left-color: #79c0ff; }
+        .card-deps .card-title { color: #79c0ff; }
+        
+        .card-env { border-left-color: #d2a8ff; }
+        .card-env .card-title { color: #d2a8ff; }
+
+        .footer {
+            position: absolute;
+            bottom: 25px;
+            right: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: #484f58;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<div class="grid-bg"></div>
+<!-- Header -->
+<div class="header">
+<p class="page-title">Deploy Only for Main Branch</p>
+<i class="fa-solid fa-rocket" style="font-size: 2.2rem; color: #ff7b72;"></i>
+</div>
+<div class="content-area">
+<!-- Code Editor -->
+<div class="editor-window">
+<div class="editor-header">
+<div class="file-info">
+<i class="fa-brands fa-github text-gray-500"></i>
+<span class="file-path">.github/workflows/</span>
+<span class="file-name">ci.yml</span>
+</div>
+<div class="editor-controls">
+<div class="control-dot dot-red"></div>
+<div class="control-dot dot-yellow"></div>
+<div class="control-dot dot-green"></div>
+</div>
+</div>
+<div class="editor-body">
+<div class="code-line"><div class="line-num">30</div><div class="code-content"> <span class="cmt"># Continuation of previous workflow file</span></div></div>
+<div class="code-line"><div class="line-num">31</div><div class="code-content"> <span class="prop">deploy</span>:</div></div>
+<div class="code-line"><div class="line-num">32</div><div class="code-content"> <span class="prop">needs</span>: <span class="val">build-and-test</span></div></div>
+<div class="code-line highlight-line"><div class="line-num">33</div><div class="code-content"> <span class="prop">if</span>: <span class="str">github.ref == 'refs/heads/main'</span></div></div>
+<div class="code-line"><div class="line-num">34</div><div class="code-content"> <span class="prop">runs-on</span>: <span class="val">ubuntu-latest</span></div></div>
+<div class="code-line"><div class="line-num">35</div><div class="code-content"> <span class="prop">environment</span>:</div></div>
+<div class="code-line"><div class="line-num">36</div><div class="code-content"> <span class="obj">name</span>: <span class="str">production</span></div></div>
+<div class="code-line"><div class="line-num">37</div><div class="code-content"> <span class="obj">url</span>: <span class="str">https://myapp.com</span></div></div>
+<div class="code-line"><div class="line-num">38</div><div class="code-content"></div></div>
+<div class="code-line"><div class="line-num">39</div><div class="code-content"> <span class="kwd">steps</span>:</div></div>
+<div class="code-line"><div class="line-num">40</div><div class="code-content">    - <span class="kwd">name</span>: <span class="str">Checkout code</span></div></div>
+<div class="code-line"><div class="line-num">41</div><div class="code-content"> <span class="kwd">uses</span>: <span class="act">actions/checkout@v4</span></div></div>
+<div class="code-line"><div class="line-num">42</div><div class="code-content"></div></div>
+<div class="code-line"><div class="line-num">43</div><div class="code-content">    - <span class="kwd">name</span>: <span class="str">Deploy to Production</span></div></div>
+<div class="code-line"><div class="line-num">44</div><div class="code-content"> <span class="kwd">run</span>: <span class="val">./scripts/deploy.sh</span></div></div>
+<div class="code-line"><div class="line-num">45</div><div class="code-content"> <span class="kwd">env</span>:</div></div>
+<div class="code-line"><div class="line-num">46</div><div class="code-content"> <span class="obj">API_KEY</span>: <span class="str">${{ secrets.PROD_API_KEY }}</span></div></div>
+</div>
+</div>
+<!-- Annotations -->
+<div class="annotations">
+<div class="annotation-card card-condition">
+<h3 class="card-title"><i class="fa-solid fa-code-branch"></i> The Condition (Line 33)</h3>
+<p class="card-desc">The critical logic <code>if: github.ref == ...</code> ensures this job <span style="text-decoration: underline;">only</span> runs when code is pushed to the <strong>main</strong> branch. It is skipped on dev branches.</p>
+</div>
+<div class="annotation-card card-deps">
+<h3 class="card-title"><i class="fa-solid fa-arrow-down-long"></i> Sequential Flow (Line 32)</h3>
+<p class="card-desc"><code>needs: build-and-test</code> creates a dependency. The deploy job will wait and will <strong>not run</strong> if the build or test jobs fail.</p>
+</div>
+<div class="annotation-card card-env">
+<h3 class="card-title"><i class="fa-solid fa-shield-halved"></i> Production Gate (Line 35)</h3>
+<p class="card-desc">Targeting the <code>production</code> environment allows you to enforce manual approval rules and access restricted secrets (like API keys) securely.</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<p>14 / 20</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dev vs Main Summary</title>
+<script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #0d1117; /* GitHub Dark Dimmed */
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Background Pattern */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2330363d' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Header */
+        .header {
+            padding: 40px 60px 20px 60px;
+            z-index: 10;
+            border-bottom: 1px solid #30363d;
+            background-color: #0d1117;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        /* Main Content */
+        .content-area {
+            display: flex;
+            flex: 1;
+            z-index: 10;
+            padding: 40px 80px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* Table Container */
+        .table-wrapper {
+            width: 100%;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .comp-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.1rem;
+        }
+
+        .comp-table th, .comp-table td {
+            padding: 24px 30px;
+            text-align: left;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .comp-table th {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background-color: #0d1117;
+            font-size: 1rem;
+        }
+
+        .comp-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comp-table tr:hover {
+            background-color: rgba(110, 118, 129, 0.05);
+        }
+
+        /* Column Specifics */
+        .col-aspect {
+            width: 20%;
+            color: #8b949e;
+            font-weight: 600;
+        }
+
+        .col-dev {
+            width: 40%;
+            border-left: 1px solid #30363d;
+        }
+
+        .col-main {
+            width: 40%;
+            border-left: 1px solid #30363d;
+        }
+
+        /* Headers */
+        .th-dev {
+            border-top: 4px solid #a371f7;
+            color: #d2a8ff;
+        }
+
+        .th-main {
+            border-top: 4px solid #2ea44f;
+            color: #3fb950;
+        }
+
+        /* Badges & Icons */
+        .branch-badge {
+            font-family: 'Roboto Mono', monospace;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-dev {
+            background-color: rgba(163, 113, 247, 0.1);
+            color: #d2a8ff;
+            border: 1px solid rgba(163, 113, 247, 0.2);
+        }
+
+        .badge-main {
+            background-color: rgba(46, 164, 79, 0.1);
+            color: #3fb950;
+            border: 1px solid rgba(46, 164, 79, 0.2);
+        }
+
+        .status-yes {
+            color: #3fb950;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .status-no {
+            color: #8b949e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.7;
+        }
+        
+        .status-danger {
+            color: #ff7b72;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cell-desc {
+            line-height: 1.5;
+            color: #e6edf3;
+        }
+
+        .icon-box {
+            width: 24px;
+            text-align: center;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 25px;
+            right: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: #484f58;
+            z-index: 20;
+        }
+
+        /* Decorative Background Elements */
+        .glow-spot {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.1;
+        }
+        
+        .glow-left { background-color: #a371f7; top: 20%; left: 20%; }
+        .glow-right { background-color: #2ea44f; bottom: 20%; right: 20%; }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<div class="grid-bg"></div>
+<div class="glow-spot glow-left"></div>
+<div class="glow-spot glow-right"></div>
+<!-- Header -->
+<div class="header">
+<p class="page-title">Dev vs Main Summary</p>
+<i class="fa-solid fa-code-compare" style="font-size: 2rem; color: #7ee787;"></i>
+</div>
+<!-- Main Content -->
+<div class="content-area">
+<div class="table-wrapper">
+<table class="comp-table">
+<thead>
+<tr>
+<th class="col-aspect">Feature Aspect</th>
+<th class="col-dev th-dev">
+<span class="branch-badge badge-dev">
+<i class="fa-solid fa-code-branch"></i> dev
+                            </span>
+<span style="font-size: 0.8em; opacity: 0.7; margin-left: 10px; font-weight: 400; text-transform: none;">Development</span>
+</th>
+<th class="col-main th-main">
+<span class="branch-badge badge-main">
+<i class="fa-solid fa-shield-halved"></i> main
+                            </span>
+<span style="font-size: 0.8em; opacity: 0.7; margin-left: 10px; font-weight: 400; text-transform: none;">Production</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="col-aspect">Primary Purpose</td>
+<td class="col-dev cell-desc">
+                            Integrate new features, test code stability, and find bugs early.
+                        </td>
+<td class="col-main cell-desc">
+                            Deliver stable, tested, and approved code to end-users.
+                        </td>
+</tr>
+<tr>
+<td class="col-aspect">CI (Build/Test)</td>
+<td class="col-dev">
+<div class="status-yes">
+<i class="fa-solid fa-check icon-box"></i> Yes
+                            </div>
+<p style="margin: 4px 0 0 32px; font-size: 0.9em; color: #8b949e;">Runs on every push</p>
+</td>
+<td class="col-main">
+<div class="status-yes">
+<i class="fa-solid fa-check-double icon-box"></i> Yes
+                            </div>
+<p style="margin: 4px 0 0 32px; font-size: 0.9em; color: #8b949e;">Strict quality gates</p>
+</td>
+</tr>
+<tr>
+<td class="col-aspect">CD (Deploy)</td>
+<td class="col-dev">
+<div class="status-no">
+<i class="fa-solid fa-xmark icon-box"></i> No
+                            </div>
+<p style="margin: 4px 0 0 32px; font-size: 0.9em; color: #8b949e;">Builds only (or staging)</p>
+</td>
+<td class="col-main">
+<div class="status-yes">
+<i class="fa-solid fa-rocket icon-box"></i> Yes
+                            </div>
+<p style="margin: 4px 0 0 32px; font-size: 0.9em; color: #8b949e;">Deploys to Production</p>
+</td>
+</tr>
+<tr>
+<td class="col-aspect">Protection</td>
+<td class="col-dev">
+<div class="status-no">
+<i class="fa-regular fa-circle icon-box"></i> Optional
+                            </div>
+</td>
+<td class="col-main">
+<div class="status-yes" style="color: #d2a8ff;">
+<i class="fa-solid fa-lock icon-box"></i> Protected
+                            </div>
+<p style="margin: 4px 0 0 32px; font-size: 0.9em; color: #8b949e;">Requires PR reviews</p>
+</td>
+</tr>
+<tr>
+<td class="col-aspect">Trigger Event</td>
+<td class="col-dev cell-desc">
+<i class="fa-solid fa-upload icon-box" style="color: #a371f7;"></i> Frequent Pushes
+                        </td>
+<td class="col-main cell-desc">
+<i class="fa-solid fa-code-merge icon-box" style="color: #2ea44f;"></i> Merged Pull Requests
+                        </td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Footer -->
+<div class="footer">
+<p>19 / 20</p>
+</div>
+</div>
+</body>
+</html>

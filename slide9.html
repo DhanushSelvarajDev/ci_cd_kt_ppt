@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>dev Branch Flow</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #0d1117; /* GitHub Dark Dimmed */
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Background Pattern */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2330363d' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .header {
+            padding: 30px 60px 20px 60px;
+            z-index: 10;
+            border-bottom: 1px solid #30363d;
+            background-color: #0d1117;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .content-area {
+            display: flex;
+            flex: 1;
+            z-index: 10;
+            padding: 0 60px;
+            overflow: hidden;
+        }
+
+        /* Layout Split */
+        .flow-section {
+            flex: 2;
+            padding: 30px 40px 30px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-section {
+            flex: 1;
+            padding: 40px 0 40px 40px;
+            border-left: 1px solid #30363d;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: rgba(13, 17, 23, 0.3);
+        }
+
+        /* Process Steps */
+        .step-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: relative;
+        }
+
+        /* Connecting Line */
+        .step-line {
+            position: absolute;
+            left: 24px;
+            top: 20px;
+            bottom: 20px;
+            width: 2px;
+            background-color: #30363d;
+            z-index: 0;
+        }
+
+        .step-card {
+            display: flex;
+            align-items: center;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 12px 20px;
+            position: relative;
+            z-index: 1;
+            transition: all 0.2s ease;
+            height: 64px;
+        }
+
+        .step-card:hover {
+            border-color: #a371f7; /* Purple accent for dev */
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background-color: #0d1117;
+            border: 2px solid #a371f7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 700;
+            color: #a371f7;
+            font-size: 1.2rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .step-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #e6edf3;
+            margin: 0;
+        }
+
+        .step-desc {
+            font-size: 0.9rem;
+            color: #8b949e;
+            margin: 0;
+        }
+
+        .step-icon {
+            color: #7d8590;
+            font-size: 1.2rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        /* Trigger Card (Top) */
+        .trigger-card {
+            background-color: rgba(56, 139, 253, 0.1);
+            border: 1px solid rgba(56, 139, 253, 0.4);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .trigger-icon {
+            color: #58a6ff;
+            font-size: 1.5rem;
+        }
+
+        /* Outcome Card (Bottom Right) */
+        .outcome-card {
+            background-color: rgba(46, 164, 79, 0.1);
+            border: 1px solid rgba(46, 164, 79, 0.4);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .outcome-icon {
+            font-size: 3rem;
+            color: #3fb950;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .outcome-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #3fb950;
+            margin-bottom: 10px;
+        }
+
+        .outcome-text {
+            color: #e6edf3;
+            line-height: 1.5;
+        }
+
+        /* Info Text */
+        .info-header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ffffff;
+            border-left: 4px solid #a371f7;
+            padding-left: 15px;
+        }
+
+        .info-desc {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #8b949e;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 25px;
+            right: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: #484f58;
+            z-index: 20;
+        }
+
+        /* Command tag style */
+        .cmd-tag {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            background-color: rgba(110, 118, 129, 0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: #8b949e;
+        }
+
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<div class="grid-bg"></div>
+<!-- Header -->
+<div class="header">
+<p class="page-title">dev Branch Flow</p>
+<i class="fa-solid fa-code-branch" style="font-size: 2rem; color: #a371f7;"></i>
+</div>
+<div class="content-area">
+<!-- Left: Flow Diagram -->
+<div class="flow-section">
+<!-- Step Container -->
+<div class="step-container">
+<div class="step-line"></div>
+<!-- Step 1 -->
+<div class="step-card">
+<div class="step-number">1</div>
+<div class="step-content">
+<div>
+<p class="step-title">Checkout Code</p>
+<p class="step-desc">Pull latest code from repository</p>
+</div>
+<span class="cmd-tag">actions/checkout</span>
+<i class="fa-solid fa-download step-icon"></i>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="step-card">
+<div class="step-number">2</div>
+<div class="step-content">
+<div>
+<p class="step-title">Install Dependencies</p>
+<p class="step-desc">Setup environment packages</p>
+</div>
+<span class="cmd-tag">npm ci</span>
+<i class="fa-brands fa-npm step-icon"></i>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="step-card">
+<div class="step-number">3</div>
+<div class="step-content">
+<div>
+<p class="step-title">Run Tests</p>
+<p class="step-desc">Execute unit &amp; integration tests</p>
+</div>
+<span class="cmd-tag">npm test</span>
+<i class="fa-solid fa-vial step-icon"></i>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="step-card">
+<div class="step-number">4</div>
+<div class="step-content">
+<div>
+<p class="step-title">Lint Check</p>
+<p class="step-desc">Static code analysis &amp; formatting</p>
+</div>
+<span class="cmd-tag">npm run lint</span>
+<i class="fa-solid fa-magnifying-glass step-icon"></i>
+</div>
+</div>
+<!-- Step 5 -->
+<div class="step-card">
+<div class="step-number">5</div>
+<div class="step-content">
+<div>
+<p class="step-title">Build Artifacts</p>
+<p class="step-desc">Compile project (Optional)</p>
+</div>
+<span class="cmd-tag">npm run build</span>
+<i class="fa-solid fa-layer-group step-icon"></i>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Info Panel -->
+<div class="info-section">
+<div>
+<div class="trigger-card">
+<i class="fa-solid fa-code-pull-request trigger-icon"></i>
+<div>
+<p style="font-weight: 700; color: #58a6ff; margin: 0;">TRIGGER EVENT</p>
+<p style="margin: 0; color: #c9d1d9;">Developer pushes code to <span style="font-family: 'Roboto Mono'; background: rgba(163,113,247,0.2); color: #d2a8ff; padding: 2px 5px; border-radius: 4px;">dev</span></p>
+</div>
+</div>
+<div class="info-header">Purpose</div>
+<p class="info-desc">
+                        The development branch acts as the first line of defense. 
+                        The CI pipeline runs automatically on every commit to ensure 
+                        new changes don't break existing functionality.
+                    </p>
+<p class="info-desc" style="margin-top: 15px;">
+<i class="fa-solid fa-ban" style="color: #ff7b72; margin-right: 8px;"></i>
+<strong>Note:</strong> No deployment happens in this stage.
+                    </p>
+</div>
+<div class="outcome-card">
+<i class="fa-solid fa-shield-check outcome-icon"></i>
+<p class="outcome-title">Stability Validated</p>
+<p class="outcome-text">Code is verified and ready for merge</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<p>09 / 20</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Important Concepts - GitHub Actions</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 40px 60px;
+        }
+        
+        /* Background Pattern */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2330363d' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Decorative Elements */
+        .circle-accent {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .circle-1 {
+            width: 600px;
+            height: 600px;
+            background-color: #1f6feb;
+            top: -300px;
+            right: -100px;
+        }
+        .circle-2 {
+            width: 400px;
+            height: 400px;
+            background-color: #8957e5;
+            bottom: -150px;
+            left: -100px;
+        }
+
+        .content-wrapper {
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            flex: 1;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        .page-icon {
+            font-size: 2rem;
+            color: #7ee787;
+        }
+
+        /* Concept Grid Layout */
+        .concepts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem 2.5rem; /* Row Gap, Column Gap */
+            flex: 1;
+            align-content: start;
+        }
+
+        /* Concept Card */
+        .concept-card {
+            display: flex;
+            align-items: flex-start;
+            background-color: rgba(22, 27, 34, 0.6);
+            border: 1px solid rgba(48, 54, 61, 0.6);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .concept-card:hover {
+            border-color: #58a6ff;
+            background-color: rgba(22, 27, 34, 0.95);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background-color: rgba(56, 139, 253, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            flex-shrink: 0;
+            border: 1px solid rgba(56, 139, 253, 0.2);
+        }
+
+        .card-icon {
+            font-size: 1.4rem;
+            color: #58a6ff;
+        }
+
+        /* Specific Icon Colors based on GitHub theme */
+        .icon-workflow { color: #58a6ff; background-color: rgba(88, 166, 255, 0.1); border-color: rgba(88, 166, 255, 0.2); }
+        .icon-job { color: #bc8cff; background-color: rgba(188, 140, 255, 0.1); border-color: rgba(188, 140, 255, 0.2); }
+        .icon-step { color: #7ee787; background-color: rgba(126, 231, 135, 0.1); border-color: rgba(126, 231, 135, 0.2); }
+        .icon-runner { color: #d2a8ff; background-color: rgba(210, 168, 255, 0.1); border-color: rgba(210, 168, 255, 0.2); }
+        .icon-trigger { color: #ffa657; background-color: rgba(255, 166, 87, 0.1); border-color: rgba(255, 166, 87, 0.2); }
+        .icon-secrets { color: #ff7b72; background-color: rgba(255, 123, 114, 0.1); border-color: rgba(255, 123, 114, 0.2); }
+
+        .card-content {
+            flex: 1;
+        }
+
+        .term-title {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #e6edf3;
+            margin: 0 0 6px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .term-def {
+            font-size: 0.95rem;
+            color: #8b949e;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .yml-badge {
+            font-size: 0.7em;
+            background: #30363d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+            color: #8b949e;
+            border: 1px solid #484f58;
+            font-weight: 400;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 25px;
+            right: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: #484f58;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background -->
+<div class="grid-bg"></div>
+<div class="circle-accent circle-1"></div>
+<div class="circle-accent circle-2"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<div class="header">
+<p class="page-title">Important Concepts</p>
+<i class="fa-solid fa-book-journal-whills page-icon"></i>
+</div>
+<!-- Concept Grid -->
+<div class="concepts-grid">
+<!-- Item 1: Workflow -->
+<div class="concept-card">
+<div class="card-icon-box icon-workflow">
+<i class="fa-solid fa-file-code card-icon"></i>
+</div>
+<div class="card-content">
+<h3 class="term-title">Workflow <span class="yml-badge">.yml</span></h3>
+<p class="term-def">The complete automated process defined in a YAML file. It contains the configuration for all jobs and steps.</p>
+</div>
+</div>
+<!-- Item 4: Runner -->
+<div class="concept-card">
+<div class="card-icon-box icon-runner">
+<i class="fa-solid fa-server card-icon"></i>
+</div>
+<div class="card-content">
+<h3 class="term-title">Runner</h3>
+<p class="term-def">The server that executes your jobs. Can be GitHub-hosted (e.g., <span style="font-family:'Roboto Mono'; font-size:0.9em;">ubuntu-latest</span>) or self-hosted on your own infrastructure.</p>
+</div>
+</div>
+<!-- Item 2: Job -->
+<div class="concept-card">
+<div class="card-icon-box icon-job">
+<i class="fa-solid fa-cubes card-icon"></i>
+</div>
+<div class="card-content">
+<h3 class="term-title">Job</h3>
+<p class="term-def">A group of steps that execute on the same runner. Jobs run in parallel by default but can be configured to run sequentially.</p>
+</div>
+</div>
+<!-- Item 5: Trigger -->
+<div class="concept-card">
+<div class="card-icon-box icon-trigger">
+<i class="fa-solid fa-bolt card-icon"></i>
+</div>
+<div class="card-content">
+<h3 class="term-title">Trigger <span class="yml-badge">on:</span></h3>
+<p class="term-def">The event that starts the workflow. Common triggers include <span style="font-family:'Roboto Mono'; font-size:0.9em;">push</span>, <span style="font-family:'Roboto Mono'; font-size:0.9em;">pull_request</span>, or scheduled times.</p>
+</div>
+</div>
+<!-- Item 3: Step -->
+<div class="concept-card">
+<div class="card-icon-box icon-step">
+<i class="fa-solid fa-list-check card-icon"></i>
+</div>
+<div class="card-content">
+<h3 class="term-title">Step</h3>
+<p class="term-def">A single task within a job. It can either run a shell command or execute a pre-built GitHub Action.</p>
+</div>
+</div>
+<!-- Item 6: Secrets -->
+<div class="concept-card">
+<div class="card-icon-box icon-secrets">
+<i class="fa-solid fa-key card-icon"></i>
+</div>
+<div class="card-content">
+<h3 class="term-title">Secrets / Env</h3>
+<p class="term-def">Encrypted environment variables used to store sensitive data like API keys, tokens, and passwords safely.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="footer">
+<p>15 / 20</p>
+</div>
+</div>
+</body>
+</html>

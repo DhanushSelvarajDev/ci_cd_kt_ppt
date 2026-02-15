@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Branch Strategy</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #0d1117; /* GitHub Dark Dimmed */
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Background grid pattern */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2330363d' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .header {
+            padding: 40px 60px 20px 60px;
+            z-index: 10;
+            border-bottom: 1px solid #30363d;
+            background-color: #0d1117;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .content-area {
+            display: flex;
+            flex: 1;
+            z-index: 10;
+            padding: 40px 60px;
+            gap: 40px;
+        }
+
+        /* Branch Cards */
+        .branch-card {
+            flex: 1;
+            background-color: rgba(22, 27, 34, 0.7);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .branch-card:hover {
+            border-color: #8b949e;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .card-header {
+            padding: 25px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: rgba(48, 54, 61, 0.2);
+        }
+
+        .branch-name {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-body {
+            padding: 30px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Styling for DEV branch */
+        .dev-card {
+            border-top: 4px solid #a371f7; /* Purple */
+        }
+        .dev-text { color: #a371f7; }
+        .dev-bg-icon {
+            color: rgba(163, 113, 247, 0.05);
+        }
+
+        /* Styling for MAIN branch */
+        .main-card {
+            border-top: 4px solid #2ea44f; /* Green */
+        }
+        .main-text { color: #2ea44f; }
+        .main-bg-icon {
+            color: rgba(46, 164, 79, 0.05);
+        }
+
+        /* List Items */
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #e6edf3;
+        }
+
+        .feature-icon {
+            margin-right: 15px;
+            margin-top: 4px;
+            font-size: 1rem;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            margin-top: auto;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .status-dev {
+            background-color: rgba(163, 113, 247, 0.1);
+            color: #d2a8ff;
+            border: 1px solid rgba(163, 113, 247, 0.3);
+        }
+
+        .status-main {
+            background-color: rgba(46, 164, 79, 0.1);
+            color: #3fb950;
+            border: 1px solid rgba(46, 164, 79, 0.3);
+        }
+
+        /* Large BG Icons */
+        .bg-icon {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            font-size: 12rem;
+            pointer-events: none;
+            z-index: 0;
+            transform: rotate(-15deg);
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 25px;
+            right: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: #484f58;
+            z-index: 20;
+        }
+
+        /* Git Graph Visual in center (optional) */
+        .git-connector {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #484f58;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<div class="grid-bg"></div>
+<!-- Header -->
+<div class="header">
+<p class="page-title">Branch Strategy</p>
+<i class="fa-solid fa-code-branch" style="font-size: 2rem; color: #7ee787;"></i>
+</div>
+<div class="content-area">
+<!-- DEV Branch Card -->
+<div class="branch-card dev-card">
+<i class="fa-brands fa-git-alt bg-icon dev-bg-icon"></i>
+<div class="card-header">
+<span class="branch-name dev-text">
+<i class="fa-solid fa-code-branch"></i> dev
+                </span>
+<span class="text-sm text-gray-500 font-mono">Development</span>
+</div>
+<div class="card-body" style="z-index: 1;">
+<ul class="feature-list">
+<li class="feature-item">
+<i class="fa-solid fa-arrows-rotate feature-icon dev-text"></i>
+<p><strong>Frequent Changes:</strong> Developers merge feature branches here daily.</p>
+</li>
+<li class="feature-item">
+<i class="fa-solid fa-flask feature-icon dev-text"></i>
+<p><strong>CI Process:</strong> Runs unit tests, linting, and builds automatically.</p>
+</li>
+<li class="feature-item">
+<i class="fa-solid fa-shield-cat feature-icon dev-text"></i>
+<p><strong>Quality Gate:</strong> Ensures code stability before reaching production.</p>
+</li>
+</ul>
+<div class="status-badge status-dev">
+<i class="fa-solid fa-ban"></i> No Deployment
+                </div>
+</div>
+</div>
+<!-- Arrow Connector -->
+<div class="git-connector">
+<i class="fa-solid fa-arrow-right"></i>
+</div>
+<!-- MAIN Branch Card -->
+<div class="branch-card main-card">
+<i class="fa-solid fa-server bg-icon main-bg-icon"></i>
+<div class="card-header">
+<span class="branch-name main-text">
+<i class="fa-solid fa-shield-halved"></i> main
+                </span>
+<span class="text-sm text-gray-500 font-mono">Production</span>
+</div>
+<div class="card-body" style="z-index: 1;">
+<ul class="feature-list">
+<li class="feature-item">
+<i class="fa-solid fa-lock feature-icon main-text"></i>
+<p><strong>Protected Branch:</strong> Direct pushes are restricted; requires Pull Request review.</p>
+</li>
+<li class="feature-item">
+<i class="fa-solid fa-rocket feature-icon main-text"></i>
+<p><strong>CI/CD Process:</strong> Runs full test suite followed by automated deployment.</p>
+</li>
+<li class="feature-item">
+<i class="fa-solid fa-users feature-icon main-text"></i>
+<p><strong>Live Environment:</strong> Code here reflects what end-users see.</p>
+</li>
+</ul>
+<div class="status-badge status-main">
+<i class="fa-solid fa-cloud-arrow-up"></i> Auto Deploys
+                </div>
+</div>
+</div>
+</div>
+<div class="footer">
+<p>08 / 20</p>
+</div>
+</div>
+</body>
+</html>

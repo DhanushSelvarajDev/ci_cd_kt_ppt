@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Where We Use CI/CD</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 40px 60px;
+        }
+        
+        /* Background Pattern */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2330363d' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Decorative Elements */
+        .circle-accent {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .circle-1 {
+            width: 600px;
+            height: 600px;
+            background-color: #238636; /* GitHub Success Green for variety */
+            bottom: -200px;
+            left: -100px;
+        }
+
+        .content-wrapper {
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        .page-icon {
+            font-size: 2rem;
+            color: #7ee787; 
+        }
+
+        .main-content {
+            display: flex;
+            gap: 4rem;
+            flex: 1;
+            align-items: flex-start;
+        }
+
+        .list-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .section-header {
+            color: #58a6ff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border-left: 4px solid #58a6ff;
+            padding-left: 12px;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+            color: #e6edf3;
+            background-color: rgba(22, 27, 34, 0.6); 
+            padding: 14px 20px;
+            border-radius: 6px;
+            border: 1px solid rgba(48, 54, 61, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        .list-item:hover {
+            border-color: #58a6ff;
+            background-color: rgba(22, 27, 34, 0.9);
+            transform: translateX(4px);
+        }
+
+        .bullet-icon {
+            color: #8b949e;
+            margin-right: 1rem;
+            font-size: 1rem;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        
+        .list-item:hover .bullet-icon {
+            color: #58a6ff;
+        }
+
+        .stack-card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 10px;
+        }
+
+        .stack-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .stack-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .stack-icon {
+            font-size: 2rem;
+            margin-right: 1.5rem;
+            width: 40px;
+            text-align: center;
+        }
+
+        .stack-info h4 {
+            margin: 0 0 4px 0;
+            color: #ffffff;
+            font-size: 1.2rem;
+        }
+
+        .stack-info p {
+            margin: 0;
+            color: #8b949e;
+            font-size: 0.9rem;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .react-color { color: #61dafb; }
+        .node-color { color: #339933; }
+        .mongo-color { color: #47A248; }
+
+        .footer {
+            position: absolute;
+            bottom: 25px;
+            right: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: #484f58;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background -->
+<div class="grid-bg"></div>
+<div class="circle-accent circle-1"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<div class="header">
+<p class="page-title">Where We Use CI/CD?</p>
+<i class="fa-solid fa-map-location-dot page-icon"></i>
+</div>
+<!-- Content Grid -->
+<div class="main-content">
+<!-- Left Column: Use Cases -->
+<div class="list-column">
+<p class="section-header">Common Use Cases</p>
+<div class="list-item">
+<i class="fa-solid fa-globe bullet-icon"></i>
+<p>Web Applications</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-server bullet-icon"></i>
+<p>Backend APIs</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-mobile-screen bullet-icon"></i>
+<p>Mobile Apps</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-cubes-stacked bullet-icon"></i>
+<p>Microservices</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-building bullet-icon"></i>
+<p>Enterprise Applications</p>
+</div>
+</div>
+<!-- Right Column: Example Stack -->
+<div class="list-column">
+<p class="section-header">Example Stack</p>
+<div class="stack-card">
+<div class="stack-item">
+<i class="fa-brands fa-react stack-icon react-color"></i>
+<div class="stack-info">
+<h4>Frontend</h4>
+<p>React</p>
+</div>
+</div>
+<div class="stack-item">
+<i class="fa-brands fa-node stack-icon node-color"></i>
+<div class="stack-info">
+<h4>Backend</h4>
+<p>Node.js</p>
+</div>
+</div>
+<div class="stack-item">
+<i class="fa-solid fa-database stack-icon mongo-color"></i>
+<div class="stack-info">
+<h4>Database</h4>
+<p>MongoDB</p>
+</div>
+</div>
+</div>
+<div class="list-item" style="margin-top: 20px; background-color: rgba(56, 139, 253, 0.1); border-color: rgba(56, 139, 253, 0.4);">
+<i class="fa-solid fa-arrow-trend-up bullet-icon" style="color: #58a6ff;"></i>
+<p style="font-size: 1rem;">This stack integrates seamlessly with GitHub Actions via <span style="font-family: 'Roboto Mono', monospace; background: rgba(110,118,129,0.4); padding: 2px 4px; border-radius: 4px;">npm</span> scripts.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="footer">
+<p>06 / 20</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>What is GitHub Actions?</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 40px 60px;
+        }
+        
+        /* Background Pattern */
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2330363d' fill-opacity='0.4' fill-rule='evenodd'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Decorative Elements */
+        .circle-accent {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .circle-1 {
+            width: 600px;
+            height: 600px;
+            background-color: #1f6feb;
+            top: -300px;
+            right: -100px;
+        }
+        
+        /* Secondary accent for variety */
+        .circle-2 {
+            width: 400px;
+            height: 400px;
+            background-color: #238636; /* GitHub Green */
+            bottom: -150px;
+            left: -100px;
+        }
+
+        .content-wrapper {
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        .page-icon {
+            font-size: 2.5rem;
+            color: #ffffff; 
+        }
+
+        .list-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 4rem;
+            flex: 1;
+            align-content: center;
+        }
+
+        .list-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+            color: #e6edf3;
+            background-color: rgba(22, 27, 34, 0.6);
+            padding: 16px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(48, 54, 61, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        .list-item:hover {
+            border-color: #58a6ff;
+            background-color: rgba(22, 27, 34, 0.95);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .bullet-icon {
+            color: #58a6ff;
+            margin-right: 1.2rem;
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .highlight-text {
+            color: #7ee787; /* Green for emphasis */
+            font-weight: 600;
+        }
+
+        .code-tag {
+            font-family: 'Roboto Mono', monospace;
+            background-color: rgba(110, 118, 129, 0.4);
+            color: #a5d6ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin: 0 4px;
+            border: 1px solid rgba(240, 246, 252, 0.1);
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 25px;
+            right: 40px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8rem;
+            color: #484f58;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body>
+<div class="slide-container">
+<!-- Background -->
+<div class="grid-bg"></div>
+<div class="circle-accent circle-1"></div>
+<div class="circle-accent circle-2"></div>
+<div class="content-wrapper">
+<!-- Header -->
+<div class="header">
+<p class="page-title">What is GitHub Actions?</p>
+<i class="fa-brands fa-github page-icon"></i>
+</div>
+<!-- Content Grid -->
+<div class="list-container">
+<!-- Left Column: Core Definition -->
+<div class="list-column">
+<div class="list-item">
+<i class="fa-solid fa-server bullet-icon"></i>
+<p>Built-in <span class="highlight-text">CI/CD platform</span> integrated directly into GitHub</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-robot bullet-icon"></i>
+<p>Automates software workflows entirely within your repository</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-file-code bullet-icon"></i>
+<p>Configured using simple <span class="code-tag">.yml</span> files in <span class="code-tag">.github/workflows</span></p>
+</div>
+</div>
+<!-- Right Column: Capabilities -->
+<div class="list-column">
+<div class="list-item">
+<i class="fa-solid fa-vial-circle-check bullet-icon"></i>
+<p>Automatically <span class="highlight-text">run tests</span> and build projects on every commit</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-rocket bullet-icon"></i>
+<p>Seamlessly <span class="highlight-text">deploy</span> applications to any cloud provider</p>
+</div>
+<div class="list-item">
+<i class="fa-solid fa-bolt bullet-icon"></i>
+<p>Triggered by events: <span class="code-tag">push</span>, <span class="code-tag">pull_request</span>, or schedule</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="footer">
+<p>07 / 20</p>
+</div>
+</div>
+</body>
+</html>
