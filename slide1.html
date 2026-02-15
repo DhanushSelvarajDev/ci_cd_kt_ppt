@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 
 <html lang="en">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>CI/CD Implementation using GitHub Actions</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-<style>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>CI/CD Implementation using GitHub Actions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;family=Roboto+Mono:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
             background-color: #000;
         }
+
         .slide-container {
             width: 1280px;
             height: 720px;
-            background-color: #0d1117; /* GitHub Dark Dimmed */
+            background-color: #0d1117;
+            /* GitHub Dark Dimmed */
             color: #c9d1d9;
             font-family: 'Inter', sans-serif;
             position: relative;
@@ -28,7 +33,7 @@
             justify-content: center;
             overflow: hidden;
         }
-        
+
         /* Decorative Background Elements */
         .blob {
             position: absolute;
@@ -36,20 +41,25 @@
             opacity: 0.15;
             z-index: 0;
         }
+
         .blob-1 {
             width: 600px;
             height: 600px;
-            background-color: #1f6feb; /* GitHub Blue */
+            background-color: #1f6feb;
+            /* GitHub Blue */
             top: -200px;
             left: -100px;
         }
+
         .blob-2 {
             width: 500px;
             height: 500px;
-            background-color: #8957e5; /* GitHub Purple */
+            background-color: #8957e5;
+            /* GitHub Purple */
             bottom: -150px;
             right: -100px;
         }
+
         .grid-bg {
             position: absolute;
             width: 100%;
@@ -81,7 +91,8 @@
         }
 
         .highlight-text {
-            color: #58a6ff; /* GitHub Blue Link */
+            color: #58a6ff;
+            /* GitHub Blue Link */
             display: block;
             margin-top: 0.5rem;
         }
@@ -101,7 +112,7 @@
             margin-bottom: 3rem;
             gap: 1rem;
         }
-        
+
         .node {
             width: 80px;
             height: 80px;
@@ -114,7 +125,7 @@
             font-size: 2rem;
             position: relative;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
         .connector {
@@ -130,16 +141,33 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 50%; /* Animated look static */
+            width: 50%;
+            /* Animated look static */
             height: 100%;
             background-color: #58a6ff;
             opacity: 0.5;
         }
 
         /* Specific Node Styles */
-        .node-ci { border-color: #d2a8ff; color: #d2a8ff; } /* Purple */
-        .node-actions { border-color: #58a6ff; color: #58a6ff; background-color: rgba(88, 166, 255, 0.1); } /* Blue */
-        .node-cd { border-color: #2ea44f; color: #2ea44f; } /* Green */
+        .node-ci {
+            border-color: #d2a8ff;
+            color: #d2a8ff;
+        }
+
+        /* Purple */
+        .node-actions {
+            border-color: #58a6ff;
+            color: #58a6ff;
+            background-color: rgba(88, 166, 255, 0.1);
+        }
+
+        /* Blue */
+        .node-cd {
+            border-color: #2ea44f;
+            color: #2ea44f;
+        }
+
+        /* Green */
 
         .node-label {
             position: absolute;
@@ -162,7 +190,7 @@
             display: flex;
             align-items: center;
             gap: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .tagline-divider {
@@ -181,57 +209,58 @@
             color: #484f58;
             z-index: 10;
         }
-
     </style>
 </head>
+
 <body>
-<div class="slide-container">
-<!-- Background Decorations -->
-<div class="grid-bg"></div> <!-- Grid simulation using SVG pattern in CSS -->
-<div class="blob blob-1"></div>
-<div class="blob blob-2"></div>
-<div class="content-wrapper">
-<!-- Icon/Pipeline Visual -->
-<div class="pipeline-visual">
-<div class="node node-ci">
-<i class="fa-solid fa-code-commit"></i>
-<span class="node-label">COMMIT</span>
-</div>
-<div class="connector"></div>
-<div class="node node-actions">
-<i class="fa-brands fa-github-alt"></i> <!-- GitHub Actions Logo proxy -->
-<span class="node-label">ACTIONS</span>
-</div>
-<div class="connector"></div>
-<div class="node node-cd">
-<i class="fa-solid fa-rocket"></i>
-<span class="node-label">DEPLOY</span>
-</div>
-</div>
-<!-- Main Title -->
-<div class="main-title">
-<p>CI/CD Implementation</p>
-<span class="highlight-text">using GitHub Actions</span>
-</div>
-<!-- Subtitle -->
-<p class="subtitle">
+    <div class="slide-container">
+        <!-- Background Decorations -->
+        <div class="grid-bg"></div> <!-- Grid simulation using SVG pattern in CSS -->
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="content-wrapper">
+            <!-- Icon/Pipeline Visual -->
+            <div class="pipeline-visual">
+                <div class="node node-ci">
+                    <i class="fa-solid fa-code-commit"></i>
+                    <span class="node-label">COMMIT</span>
+                </div>
+                <div class="connector"></div>
+                <div class="node node-actions">
+                    <i class="fa-brands fa-github-alt"></i> <!-- GitHub Actions Logo proxy -->
+                    <span class="node-label">ACTIONS</span>
+                </div>
+                <div class="connector"></div>
+                <div class="node node-cd">
+                    <i class="fa-solid fa-rocket"></i>
+                    <span class="node-label">DEPLOY</span>
+                </div>
+            </div>
+            <!-- Main Title -->
+            <div class="main-title">
+                <p>CI/CD Implementation</p>
+                <span class="highlight-text">using GitHub Actions</span>
+            </div>
+            <!-- Subtitle -->
+            <p class="subtitle">
                 Automation-driven development and deployment for modern applications.
                 Streamline your workflow from code to cloud.
             </p>
-<!-- Tech Tagline -->
-<div class="tagline-box">
-<span>CI = Quality</span>
-<span class="tagline-divider">|</span>
-<span>CD = Deployment</span>
-<span class="tagline-divider">|</span>
-<span>Automation = Productivity</span>
-</div>
-</div>
-<!-- Footer -->
-<div class="footer-info">
-<p><i class="fa-regular fa-user-circle"></i> DevOps Team</p>
-<p><i class="fa-regular fa-calendar"></i> 2026-02-15</p>
-</div>
-</div>
+            <!-- Tech Tagline -->
+            <div class="tagline-box">
+                <span>CI = Quality</span>
+                <span class="tagline-divider">|</span>
+                <span>CD = Deployment</span>
+                <span class="tagline-divider">|</span>
+                <span>Automation = Productivity</span>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div class="footer-info">
+            <p><i class="fa-regular fa-user-circle"></i> Dhanush S</p>
+            <p><i class="fa-regular fa-calendar"></i> 2026-02-15</p>
+        </div>
+    </div>
 </body>
+
 </html>
